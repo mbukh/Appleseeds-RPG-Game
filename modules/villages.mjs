@@ -1,10 +1,19 @@
-import generateId from "./utils.mjs";
+import utils from "./utils.mjs";
 
 function randomVillage() {
-    this.id = generateId();
+    this.id = utils.generateId(100);
     this.name = generateVillageName();
     this.monsters = [];
-    this.addMonster = (monsterId) => this.monsters.push(monsterId);
+    this.addMonster = (monster) => this.monsters.push(monster);
+    this.getMonsters = () => this.monsters;
+}
+
+function generateVillages(n) {
+    const villages = [];
+    for (let i = 0; i < n; i++) {
+        villages.push(new randomVillage());
+    }
+    return villages;
 }
 
 function generateVillageName() {
@@ -35,14 +44,6 @@ function generateVillageName() {
         names[Math.floor(Math.random() * names.length)],
         suffixes[Math.floor(Math.random() * suffixes.length)],
     ].join(" ");
-}
-
-function generateVillages(n) {
-    const villages = [];
-    for (let i = 0; i < n; i++) {
-        villages.push(new randomVillage());
-    }
-    return villages;
 }
 
 export default generateVillages;

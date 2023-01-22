@@ -1,32 +1,36 @@
-import generateId from "./utils.mjs";
+import utils from "./utils.mjs";
 
 function radomMonster() {
-    this.id = generateId();
+    this.id = utils.generateId(200);
     this.name = generateMonsterName();
     this.villageId = 0;
     this.stats = {
-        health: Math.floor(Math.random() * 61) + 40, // 40 - 100
-        attack: Math.floor(Math.random() * 26) + 5, // 5 - 30
-        defense: Math.floor(Math.random() * 16) + 5, //  5 - 20
-        dexterity: Math.floor(Math.random() * 11), // 0 - 10
-        level: Math.ceil(Math.random() * 10),
+        health: utils.rand(30, 100),
+        maxHealth: this.health,
+        attack: utils.rand(5, 30),
+        defense: utils.rand(5, 30),
+        dexterity: utils.rand(0, 10),
+        level: utils.rand(1, 10),
         xp: 0,
         gold: 0,
-        potion: 0,
+        potions: 0,
     };
     this.levelUp = () => (this.level += 1);
-    this.setVillage = (villageId) => (this.villageId = villageId);
+    this.setVillage = (village) => (this.villageId = village);
+    this.getStats = () => {
+        return this.stats;
+    };
 }
 
-function generateMonsters(n, villages = []) {
+function generateMonsters(villages) {
     const monsters = [];
-    for (let i = 0; i < n; i++) {
-        let villageId =
-            villages[Math.floor(Math.random() * villages.length)]?.id || 0;
-        const monster = new radomMonster();
-        monster.setVillage(villageId);
-        villages[villageId]?.addMonster(monster.id);
-        monsters.push(monster);
+    for (const village of villages) {
+        for (let i = 0; i < utils.rand(5, 10); i++) {
+            let monster = new radomMonster();
+            monster.setVillage(village.id);
+            village.addMonster(monster);
+            monsters.push(monster);
+        }
     }
     return monsters;
 }
